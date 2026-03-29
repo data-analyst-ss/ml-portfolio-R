@@ -3,1266 +3,1549 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sarah Silva — Machine Learning Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<title>Sarah Silva — ML Portfolio | Harvard Data Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080c12;
-    --bg2: #0d1220;
-    --bg3: #111827;
-    --card: #131c2e;
-    --card2: #1a2540;
-    --border: #1e2d47;
-    --accent: #00d4ff;
-    --accent2: #7c3aed;
-    --accent3: #10b981;
-    --accent4: #f59e0b;
-    --text: #e2e8f0;
-    --text2: #94a3b8;
-    --text3: #64748b;
-    --glow: 0 0 30px rgba(0,212,255,0.15);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
-
-  /* NOISE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 0.4;
-  }
-
-  /* GRID BACKGROUND */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: 
-      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(8,12,18,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-logo {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--accent);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 32px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    color: var(--text2);
-    text-decoration: none;
-    font-size: 13px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: color 0.2s;
-    font-family: 'Space Mono', monospace;
-  }
-
-  .nav-links a:hover { color: var(--accent); }
-
-  /* HERO */
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 120px 80px 80px;
-    overflow: hidden;
-  }
-
-  .hero-glow {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
-    top: 50%;
-    right: -100px;
-    transform: translateY(-50%);
-    pointer-events: none;
-  }
-
-  .hero-glow2 {
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%);
-    bottom: -100px;
-    left: 200px;
-    pointer-events: none;
-  }
-
-  .hero-content { position: relative; z-index: 1; max-width: 700px; }
-
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0,212,255,0.08);
-    border: 1px solid rgba(0,212,255,0.2);
-    color: var(--accent);
-    padding: 6px 16px;
-    border-radius: 100px;
-    font-size: 12px;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 32px;
-    animation: fadeInUp 0.6s ease forwards;
-  }
-
-  .hero-tag::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-  }
-
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(48px, 6vw, 80px);
-    font-weight: 800;
-    line-height: 1.05;
-    margin-bottom: 24px;
-    animation: fadeInUp 0.6s ease 0.1s both;
-  }
-
-  h1 .name { color: var(--accent); }
-  h1 .dim { color: var(--text3); }
-
-  .hero-sub {
-    font-size: 18px;
-    color: var(--text2);
-    font-weight: 300;
-    margin-bottom: 48px;
-    max-width: 520px;
-    animation: fadeInUp 0.6s ease 0.2s both;
-  }
-
-  .hero-stats {
-    display: flex;
-    gap: 48px;
-    animation: fadeInUp 0.6s ease 0.3s both;
-  }
-
-  .stat-item { text-align: left; }
-
-  .stat-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--accent);
-    display: block;
-  }
-
-  .stat-label {
-    font-size: 12px;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .hero-cta {
-    display: flex;
-    gap: 16px;
-    margin-top: 48px;
-    animation: fadeInUp 0.6s ease 0.4s both;
-  }
-
-  .btn {
-    padding: 14px 28px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  .btn-primary {
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-  }
-
-  .btn-primary:hover {
-    background: #33ddff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,212,255,0.3);
-  }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--text2);
-    border: 1px solid var(--border);
-  }
-
-  .btn-ghost:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: translateY(-2px);
-  }
-
-  /* SECTIONS */
-  section {
-    position: relative;
-    z-index: 1;
-    padding: 100px 80px;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 60px;
-  }
-
-  .section-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: var(--accent);
-    opacity: 0.6;
-  }
-
-  .section-line {
-    width: 40px;
-    height: 1px;
-    background: var(--border);
-  }
-
-  h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(28px, 4vw, 42px);
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  h2 span { color: var(--accent); }
-
-  .section-sub {
-    color: var(--text2);
-    font-size: 16px;
-    margin-top: 8px;
-    font-weight: 300;
-  }
-
-  /* ABOUT */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: start;
-  }
-
-  .about-text { color: var(--text2); font-size: 16px; line-height: 1.8; }
-  .about-text p { margin-bottom: 16px; }
-
-  .skills-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .skill-tag {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 13px;
-    font-family: 'Space Mono', monospace;
-    color: var(--text2);
-    transition: all 0.2s;
-  }
-
-  .skill-tag:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(0,212,255,0.05);
-  }
-
-  .skill-tag .sk-icon { margin-right: 8px; }
-
-  /* DATASETS */
-  .datasets-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 40px;
-  }
-
-  .dataset-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .dataset-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .dataset-card:hover {
-    border-color: rgba(0,212,255,0.3);
-    transform: translateY(-4px);
-    box-shadow: var(--glow);
-  }
-
-  .dataset-card:hover::before { opacity: 1; }
-
-  .dataset-icon {
-    font-size: 28px;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .dataset-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: var(--text);
-  }
-
-  .dataset-desc {
-    font-size: 13px;
-    color: var(--text3);
-    line-height: 1.6;
-    margin-bottom: 16px;
-  }
-
-  .dataset-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .tag {
-    padding: 3px 10px;
-    border-radius: 100px;
-    font-size: 11px;
-    font-family: 'Space Mono', monospace;
-    background: rgba(0,212,255,0.08);
-    color: var(--accent);
-    border: 1px solid rgba(0,212,255,0.15);
-  }
-
-  .tag.green {
-    background: rgba(16,185,129,0.08);
-    color: var(--accent3);
-    border-color: rgba(16,185,129,0.15);
-  }
-
-  .tag.purple {
-    background: rgba(124,58,237,0.08);
-    color: #a78bfa;
-    border-color: rgba(124,58,237,0.15);
-  }
-
-  .tag.yellow {
-    background: rgba(245,158,11,0.08);
-    color: var(--accent4);
-    border-color: rgba(245,158,11,0.15);
-  }
-
-  /* RESULTS TABLE */
-  .results-section { background: var(--bg2); }
-
-  .results-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
-  }
-
-  .result-block {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .result-block-header {
-    padding: 20px 24px;
-    background: var(--card2);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .result-block-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-  }
-
-  .result-block-badge {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    padding: 4px 10px;
-    background: rgba(0,212,255,0.1);
-    color: var(--accent);
-    border-radius: 100px;
-    border: 1px solid rgba(0,212,255,0.2);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-
-  th {
-    padding: 12px 24px;
-    text-align: left;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  td {
-    padding: 12px 24px;
-    border-bottom: 1px solid rgba(30,45,71,0.5);
-    color: var(--text2);
-  }
-
-  tr:last-child td { border-bottom: none; }
-
-  tr:hover td { background: rgba(0,212,255,0.02); }
-
-  .acc-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .acc-value {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--text);
-    min-width: 45px;
-  }
-
-  .acc-track {
-    flex: 1;
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .acc-fill {
-    height: 100%;
-    border-radius: 2px;
-    background: linear-gradient(90deg, var(--accent2), var(--accent));
-    transition: width 1s ease;
-  }
-
-  .best-row td { color: var(--accent); }
-  .best-row td:first-child::after {
-    content: ' ★';
-    color: var(--accent4);
-  }
-
-  /* MODEL SHOWCASE */
-  .models-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-top: 40px;
-  }
-
-  .model-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    text-align: center;
-    transition: all 0.3s;
-  }
-
-  .model-card:hover {
-    border-color: rgba(0,212,255,0.3);
-    transform: translateY(-4px);
-    box-shadow: var(--glow);
-  }
-
-  .model-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    margin: 0 auto 16px;
-  }
-
-  .model-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-
-  .model-desc {
-    font-size: 12px;
-    color: var(--text3);
-    line-height: 1.5;
-  }
-
-  /* KEY FINDINGS */
-  .findings-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-top: 40px;
-  }
-
-  .finding-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
-    transition: all 0.3s;
-  }
-
-  .finding-card:hover {
-    border-color: rgba(0,212,255,0.3);
-    transform: translateY(-4px);
-  }
-
-  .finding-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--accent);
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  .finding-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-
-  .finding-desc {
-    font-size: 13px;
-    color: var(--text3);
-    line-height: 1.6;
-  }
-
-  /* METRICS */
-  .metrics-row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 16px;
-    margin-bottom: 60px;
-  }
-
-  .metric-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    text-align: center;
-  }
-
-  .metric-val {
-    font-family: 'Space Mono', monospace;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--accent);
-    display: block;
-    margin-bottom: 4px;
-  }
-
-  .metric-label {
-    font-size: 12px;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  /* FOOTER */
-  footer {
-    background: var(--bg2);
-    border-top: 1px solid var(--border);
-    padding: 48px 80px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  .footer-left { }
-
-  .footer-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 4px;
-  }
-
-  .footer-sub {
-    font-size: 13px;
-    color: var(--text3);
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 24px;
-    align-items: center;
-  }
-
-  .footer-link {
-    color: var(--text2);
-    text-decoration: none;
-    font-size: 13px;
-    font-family: 'Space Mono', monospace;
-    transition: color 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .footer-link:hover { color: var(--accent); }
-
-  .footer-copy {
-    font-size: 12px;
-    color: var(--text3);
-    margin-top: 8px;
-  }
-
-  /* ANIMATIONS */
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* DIVIDER */
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-    margin: 0;
-  }
-
-  /* HIGHLIGHT BOX */
-  .highlight-box {
-    background: rgba(0,212,255,0.05);
-    border: 1px solid rgba(0,212,255,0.15);
-    border-radius: 12px;
-    padding: 24px 28px;
-    margin-top: 32px;
-  }
-
-  .highlight-box p {
-    color: var(--text2);
-    font-size: 14px;
-    line-height: 1.7;
-  }
-
-  .highlight-box strong { color: var(--accent); }
-
-  /* CODE STYLE */
-  code {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    background: rgba(0,212,255,0.08);
-    color: var(--accent);
-    padding: 2px 7px;
-    border-radius: 4px;
-    border: 1px solid rgba(0,212,255,0.15);
-  }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-  /* RESPONSIVE */
-  @media (max-width: 1024px) {
-    section { padding: 80px 40px; }
-    .hero { padding: 120px 40px 80px; }
-    nav { padding: 20px 40px; }
-    .datasets-grid { grid-template-columns: repeat(2, 1fr); }
-    .models-grid { grid-template-columns: repeat(2, 1fr); }
-    .results-grid { grid-template-columns: 1fr; }
-    footer { padding: 48px 40px; flex-direction: column; gap: 24px; text-align: center; }
-  }
-
-  @media (max-width: 768px) {
-    section { padding: 60px 24px; }
-    .hero { padding: 100px 24px 60px; }
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    .hero-stats { gap: 32px; }
-    .about-grid { grid-template-columns: 1fr; }
-    .datasets-grid { grid-template-columns: 1fr; }
-    .findings-grid { grid-template-columns: 1fr; }
-    .metrics-row { grid-template-columns: repeat(2, 1fr); }
-    footer { padding: 32px 24px; }
-  }
+:root {
+  --papaya: #BD6809;
+  --paradise: #9A3F4A;
+  --fuschia: #3D1419;
+  --palm: #2F4731;
+  --vervain: #121B13;
+  --papaya-light: #e8852a;
+  --paradise-light: #c45a67;
+  --palm-light: #4a7550;
+  --cream: #f5ede0;
+  --cream2: #e8d8c4;
+  --text: #f0e6d3;
+  --text2: #c4b49a;
+  --text3: #8a7a68;
+  --bg: #0e1410;
+  --card: #1a2018;
+  --card2: #22291f;
+  --border: #2a3526;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* TEXTURE */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(189,104,9,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(47,71,49,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 60% 80%, rgba(154,63,74,0.05) 0%, transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  padding: 18px 60px;
+  display:flex; justify-content:space-between; align-items:center;
+  background: rgba(14,20,16,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-brand {
+  display:flex; align-items:center; gap:14px;
+}
+
+.nav-logo-text {
+  font-family:'Playfair Display', serif;
+  font-size:16px;
+  color: var(--cream);
+  letter-spacing:0.5px;
+}
+
+.nav-logo-sub {
+  font-family:'DM Mono', monospace;
+  font-size:10px;
+  color: var(--papaya);
+  letter-spacing:2px;
+  text-transform:uppercase;
+  display:block;
+}
+
+.nav-links { display:flex; gap:32px; list-style:none; }
+.nav-links a {
+  color: var(--text2);
+  text-decoration:none;
+  font-size:13px;
+  letter-spacing:0.5px;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--papaya-light); }
+
+.nav-cta {
+  background: var(--papaya);
+  color: var(--fuschia);
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size:13px;
+  font-weight:600;
+  text-decoration:none;
+  transition: all 0.2s;
+}
+.nav-cta:hover { background: var(--papaya-light); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  position:relative; z-index:1;
+  min-height:100vh;
+  display:flex; align-items:center;
+  padding: 120px 60px 80px;
+  overflow:hidden;
+}
+
+.hero-bg-text {
+  position:absolute;
+  font-family:'Playfair Display', serif;
+  font-size: clamp(120px, 18vw, 220px);
+  font-weight:900;
+  color: rgba(189,104,9,0.04);
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  white-space:nowrap;
+  pointer-events:none;
+  user-select:none;
+}
+
+.hero-content { position:relative; z-index:1; max-width:680px; }
+
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:10px;
+  margin-bottom:28px;
+  animation: fadeUp 0.8s ease both;
+}
+
+.eyebrow-dot {
+  width:8px; height:8px;
+  background: var(--papaya);
+  border-radius:50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.5;transform:scale(0.7)}
+}
+
+.eyebrow-text {
+  font-family:'DM Mono', monospace;
+  font-size:11px;
+  color: var(--papaya);
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+
+h1 {
+  font-family:'Playfair Display', serif;
+  font-size: clamp(52px, 7vw, 88px);
+  font-weight:900;
+  line-height:1.02;
+  margin-bottom:24px;
+  animation: fadeUp 0.8s ease 0.1s both;
+}
+
+h1 em { font-style:italic; color: var(--papaya-light); }
+h1 .dim { color: var(--text3); font-weight:400; }
+
+.hero-desc {
+  font-size:17px;
+  color: var(--text2);
+  font-weight:300;
+  line-height:1.75;
+  max-width:520px;
+  margin-bottom:48px;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+
+.hero-stats {
+  display:flex; gap:48px;
+  margin-bottom:48px;
+  animation: fadeUp 0.8s ease 0.3s both;
+}
+
+.stat { text-align:left; }
+.stat-n {
+  font-family:'Playfair Display', serif;
+  font-size:42px;
+  font-weight:700;
+  color: var(--papaya-light);
+  display:block;
+  line-height:1;
+  margin-bottom:4px;
+}
+.stat-l {
+  font-size:12px;
+  color: var(--text3);
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+}
+
+.hero-btns {
+  display:flex; gap:16px;
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+
+.btn {
+  padding:14px 28px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:500;
+  text-decoration:none;
+  transition: all 0.25s;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.btn-fill {
+  background: var(--papaya);
+  color: var(--fuschia);
+  border: none;
+}
+.btn-fill:hover {
+  background: var(--papaya-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(189,104,9,0.35);
+}
+.btn-outline {
+  background:transparent;
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover {
+  border-color: var(--papaya);
+  color: var(--papaya-light);
+  transform: translateY(-2px);
+}
+
+.harvard-badge {
+  position:absolute; right:60px; top:50%;
+  transform:translateY(-50%);
+  text-align:center;
+  animation: fadeUp 0.8s ease 0.5s both;
+}
+
+.harvard-shield {
+  width:120px; height:120px;
+  margin:0 auto 16px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:60px;
+  box-shadow: 0 0 40px rgba(189,104,9,0.15);
+}
+
+.harvard-label {
+  font-family:'DM Mono', monospace;
+  font-size:10px;
+  color: var(--text3);
+  letter-spacing:2px;
+  text-transform:uppercase;
+  line-height:1.6;
+}
+
+/* SECTIONS */
+section {
+  position:relative; z-index:1;
+  padding: 100px 60px;
+}
+
+.divider {
+  position:relative; z-index:1;
+  height:1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.sec-header { margin-bottom:64px; }
+
+.sec-tag {
+  font-family:'DM Mono', monospace;
+  font-size:10px;
+  color: var(--papaya);
+  letter-spacing:3px;
+  text-transform:uppercase;
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:16px;
+}
+.sec-tag::after {
+  content:'';
+  flex:1; max-width:40px; height:1px;
+  background: var(--papaya);
+  opacity:0.4;
+}
+
+h2 {
+  font-family:'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 50px);
+  font-weight:700;
+  line-height:1.15;
+}
+h2 em { font-style:italic; color: var(--papaya-light); }
+h2 span { color: var(--paradise-light); }
+
+.sec-sub {
+  color: var(--text2);
+  font-size:16px;
+  margin-top:10px;
+  font-weight:300;
+}
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  transition: all 0.3s;
+}
+.card:hover {
+  border-color: rgba(189,104,9,0.35);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 0 1px rgba(189,104,9,0.1);
+}
+
+/* METRICS ROW */
+.metrics {
+  display:grid;
+  grid-template-columns: repeat(5,1fr);
+  gap:16px;
+  margin-bottom:64px;
+}
+.metric {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius:12px;
+  padding:24px 20px;
+  text-align:center;
+  transition: all 0.3s;
+  position:relative;
+  overflow:hidden;
+}
+.metric::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:2px;
+  background: linear-gradient(90deg, var(--papaya), var(--paradise));
+}
+.metric:hover { border-color:rgba(189,104,9,0.3); transform:translateY(-3px); }
+.metric-v {
+  font-family:'Playfair Display', serif;
+  font-size:34px;
+  font-weight:700;
+  color: var(--papaya-light);
+  display:block;
+  margin-bottom:4px;
+}
+.metric-l {
+  font-size:11px;
+  color: var(--text3);
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+}
+
+/* CHARTS INTERACTIVE */
+.charts-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+
+.chart-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  transition: all 0.3s;
+  cursor:pointer;
+}
+.chart-card:hover {
+  border-color: rgba(189,104,9,0.35);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.chart-header {
+  padding:20px 24px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:flex-start;
+}
+.chart-title {
+  font-family:'Playfair Display', serif;
+  font-size:17px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+.chart-sub { font-size:12px; color:var(--text3); }
+.chart-badge {
+  font-family:'DM Mono', monospace;
+  font-size:10px;
+  padding:4px 10px;
+  border-radius:100px;
+  background: rgba(189,104,9,0.12);
+  color: var(--papaya-light);
+  border:1px solid rgba(189,104,9,0.2);
+  white-space:nowrap;
+}
+
+.chart-body { padding:24px; }
+
+.chart-explain {
+  padding: 16px 24px;
+  background: rgba(189,104,9,0.05);
+  border-top:1px solid var(--border);
+  font-size:12px;
+  color: var(--text2);
+  line-height:1.6;
+}
+.chart-explain strong { color: var(--papaya-light); }
+
+/* BAR CHART CSS */
+.bar-chart { display:flex; flex-direction:column; gap:10px; }
+.bar-row { display:flex; align-items:center; gap:12px; }
+.bar-label { font-size:12px; color:var(--text2); min-width:160px; text-align:right; }
+.bar-track { flex:1; height:28px; background:rgba(255,255,255,0.04); border-radius:6px; overflow:hidden; position:relative; }
+.bar-fill {
+  height:100%;
+  border-radius:6px;
+  display:flex; align-items:center; justify-content:flex-end;
+  padding-right:10px;
+  font-family:'DM Mono', monospace;
+  font-size:11px;
+  color:var(--fuschia);
+  font-weight:600;
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  width:0;
+}
+.bar-fill.papaya { background: linear-gradient(90deg, var(--papaya), var(--papaya-light)); }
+.bar-fill.paradise { background: linear-gradient(90deg, var(--paradise), var(--paradise-light)); }
+.bar-fill.palm { background: linear-gradient(90deg, var(--palm), var(--palm-light)); }
+.bar-fill.best { background: linear-gradient(90deg, #c45a67, #e07a87); }
+.bar-star { color: var(--papaya-light); margin-left:6px; font-size:13px; }
+
+/* DONUT */
+.donut-wrap { display:flex; align-items:center; gap:32px; }
+.donut-svg { flex-shrink:0; }
+.donut-legend { flex:1; }
+.legend-item { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.legend-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+.legend-label { font-size:13px; color:var(--text2); }
+.legend-val {
+  font-family:'DM Mono', monospace;
+  font-size:12px;
+  color:var(--papaya-light);
+  margin-left:auto;
+}
+
+/* LINE CHART */
+.linechart-wrap { position:relative; }
+.linechart-wrap svg { width:100%; }
+
+/* SCATTER CSS */
+.scatter-wrap { position:relative; }
+
+/* PLOT IMAGE CARDS */
+.plots-grid {
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:20px;
+}
+
+.plot-card {
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  transition:all 0.3s;
+  cursor:pointer;
+}
+.plot-card:hover {
+  border-color: rgba(189,104,9,0.35);
+  transform:translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.plot-img {
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  object-position:top;
+  display:block;
+  filter: saturate(0.9) brightness(0.95);
+  transition: filter 0.3s;
+}
+.plot-card:hover .plot-img { filter: saturate(1.1) brightness(1); }
+
+.plot-info {
+  padding:16px 18px;
+}
+.plot-title {
+  font-family:'Playfair Display', serif;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.plot-desc {
+  font-size:12px;
+  color:var(--text3);
+  line-height:1.5;
+}
+.plot-tag {
+  display:inline-block;
+  margin-top:8px;
+  padding:2px 8px;
+  border-radius:100px;
+  font-size:10px;
+  font-family:'DM Mono', monospace;
+  background: rgba(189,104,9,0.1);
+  color: var(--papaya-light);
+  border:1px solid rgba(189,104,9,0.2);
+}
+
+/* MODAL */
+.modal-overlay {
+  position:fixed; inset:0; z-index:500;
+  background:rgba(0,0,0,0.85);
+  display:none; align-items:center; justify-content:center;
+  backdrop-filter:blur(8px);
+}
+.modal-overlay.active { display:flex; }
+.modal-box {
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:16px;
+  max-width:800px;
+  width:90%;
+  max-height:85vh;
+  overflow-y:auto;
+  position:relative;
+}
+.modal-img { width:100%; border-radius:12px 12px 0 0; display:block; }
+.modal-content { padding:24px; }
+.modal-title {
+  font-family:'Playfair Display', serif;
+  font-size:22px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+.modal-text { font-size:14px; color:var(--text2); line-height:1.75; }
+.modal-close {
+  position:absolute; top:16px; right:16px;
+  background:rgba(0,0,0,0.5);
+  border:none; color:var(--text); cursor:pointer;
+  width:36px; height:36px; border-radius:50%;
+  font-size:18px; display:flex; align-items:center; justify-content:center;
+  transition:background 0.2s;
+}
+.modal-close:hover { background:var(--papaya); }
+
+/* FINDINGS */
+.findings-grid {
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:20px;
+}
+
+.finding-card {
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:28px;
+  transition:all 0.3s;
+  position:relative;
+  overflow:hidden;
+}
+.finding-card::after {
+  content:'';
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:3px;
+  background: linear-gradient(90deg, var(--papaya), var(--paradise));
+  transform:scaleX(0);
+  transition:transform 0.3s;
+  transform-origin:left;
+}
+.finding-card:hover { border-color:rgba(189,104,9,0.3); transform:translateY(-4px); }
+.finding-card:hover::after { transform:scaleX(1); }
+
+.finding-n {
+  font-family:'Playfair Display', serif;
+  font-size:44px;
+  font-weight:900;
+  color: var(--papaya-light);
+  display:block;
+  line-height:1;
+  margin-bottom:10px;
+}
+.finding-title {
+  font-family:'Playfair Display', serif;
+  font-size:17px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.finding-desc { font-size:13px; color:var(--text3); line-height:1.6; }
+
+/* MODELS */
+.models-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+.model-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:22px;
+  transition:all 0.3s;
+  text-align:center;
+}
+.model-card:hover {
+  border-color:rgba(189,104,9,0.3);
+  transform:translateY(-4px);
+}
+.model-icon {
+  width:48px; height:48px;
+  border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px;
+  margin:0 auto 14px;
+}
+.model-name {
+  font-family:'Playfair Display', serif;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.model-acc {
+  font-family:'DM Mono', monospace;
+  font-size:12px;
+  color:var(--papaya-light);
+  margin-bottom:6px;
+}
+.model-desc { font-size:12px; color:var(--text3); line-height:1.5; }
+
+/* FOOTER */
+footer {
+  position:relative; z-index:1;
+  background: var(--fuschia);
+  padding:60px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.footer-brand {
+  font-family:'Playfair Display', serif;
+  font-size:24px;
+  font-weight:700;
+  color:var(--cream);
+  margin-bottom:6px;
+}
+.footer-sub { font-size:13px; color:rgba(245,237,224,0.5); }
+.footer-links { display:flex; gap:20px; align-items:center; }
+.footer-link {
+  color:rgba(245,237,224,0.6);
+  text-decoration:none;
+  font-size:13px;
+  display:flex; align-items:center; gap:8px;
+  transition:color 0.2s;
+}
+.footer-link:hover { color:var(--papaya-light); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(28px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.fade-up {
+  opacity:0; transform:translateY(24px);
+  transition:opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible { opacity:1; transform:translateY(0); }
+
+/* TAG */
+.tag {
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:100px;
+  font-size:11px;
+  font-family:'DM Mono', monospace;
+}
+.tag-p { background:rgba(189,104,9,0.1); color:var(--papaya-light); border:1px solid rgba(189,104,9,0.2); }
+.tag-r { background:rgba(154,63,74,0.1); color:var(--paradise-light); border:1px solid rgba(154,63,74,0.2); }
+.tag-g { background:rgba(47,71,49,0.2); color:var(--palm-light); border:1px solid rgba(47,71,49,0.3); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--papaya)}
+
+/* CODE */
+code {
+  font-family:'DM Mono', monospace;
+  font-size:12px;
+  background:rgba(189,104,9,0.1);
+  color:var(--papaya-light);
+  padding:2px 7px;
+  border-radius:4px;
+}
+
+@media(max-width:1024px){
+  nav,section,footer{padding-left:32px;padding-right:32px}
+  .hero{padding:100px 32px 80px}
+  .harvard-badge{display:none}
+  .charts-grid{grid-template-columns:1fr}
+  .metrics{grid-template-columns:repeat(3,1fr)}
+  .models-grid{grid-template-columns:repeat(2,1fr)}
+  .plots-grid{grid-template-columns:repeat(2,1fr)}
+  .findings-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  nav{padding:14px 20px}
+  .nav-links{display:none}
+  section{padding:60px 20px}
+  .hero{padding:90px 20px 60px}
+  footer{padding:40px 20px;flex-direction:column;gap:24px;text-align:center}
+  .metrics{grid-template-columns:1fr 1fr}
+  .findings-grid{grid-template-columns:1fr}
+  .plots-grid{grid-template-columns:1fr}
+  .models-grid{grid-template-columns:1fr 1fr}
+  h1{font-size:48px}
+}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">Sarah Silva // ML</div>
+  <div class="nav-brand">
+    <div>
+      <span class="nav-logo-sub">Harvard Data Science</span>
+      <div class="nav-logo-text">Sarah Silva</div>
+    </div>
+  </div>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#datasets">Datasets</a></li>
-    <li><a href="#results">Results</a></li>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#charts">Results</a></li>
+    <li><a href="#plots">Visualizations</a></li>
     <li><a href="#findings">Findings</a></li>
-    <li><a href="https://www.linkedin.com/in/sarah-silva" target="_blank">LinkedIn ↗</a></li>
   </ul>
+  <a href="https://www.linkedin.com/in/sarahgleicesilva/" target="_blank" class="nav-cta">LinkedIn ↗</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-glow2"></div>
+  <div class="hero-bg-text">ML</div>
   <div class="hero-content">
-    <div class="hero-tag">Machine Learning · R Programming · Data Science</div>
+    <div class="hero-eyebrow">
+      <div class="eyebrow-dot"></div>
+      <span class="eyebrow-text">Machine Learning · R Programming · Harvard</span>
+    </div>
     <h1>
-      <span class="dim">Hi, I'm</span><br>
-      <span class="name">Sarah Silva</span><br>
-      <span class="dim">ML Practitioner</span>
+      <span class="dim">Data Science</span><br>
+      <em>Portfolio</em><br>
+      <span class="dim">by Sarah Silva</span>
     </h1>
-    <p class="hero-sub">
-      A comprehensive study of supervised and unsupervised machine learning methods applied to real-world datasets — from cancer diagnosis to movie recommendations.
+    <p class="hero-desc">
+      A rigorous end-to-end machine learning study completed at Harvard, applying 10+ algorithms to real-world datasets — from cancer diagnosis to movie recommendations.
     </p>
     <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-num">12+</span>
-        <span class="stat-label">Datasets</span>
+      <div class="stat">
+        <span class="stat-n">12+</span>
+        <span class="stat-l">Datasets</span>
       </div>
-      <div class="stat-item">
-        <span class="stat-num">10+</span>
-        <span class="stat-label">ML Models</span>
+      <div class="stat">
+        <span class="stat-n">10+</span>
+        <span class="stat-l">Algorithms</span>
       </div>
-      <div class="stat-item">
-        <span class="stat-num">97.4%</span>
-        <span class="stat-label">Best Accuracy</span>
+      <div class="stat">
+        <span class="stat-n">97.4%</span>
+        <span class="stat-l">Best Accuracy</span>
       </div>
     </div>
-    <div class="hero-cta">
-      <a href="https://www.linkedin.com/in/sarah-silva" target="_blank" class="btn btn-primary">View LinkedIn ↗</a>
-      <a href="#results" class="btn btn-ghost">See Results</a>
+    <div class="hero-btns">
+      <a href="https://www.linkedin.com/in/sarahgleicesilva/" target="_blank" class="btn btn-fill">Connect on LinkedIn ↗</a>
+      <a href="#charts" class="btn btn-outline">Explore Results ↓</a>
     </div>
+  </div>
+  <div class="harvard-badge">
+    <div class="harvard-shield">🎓</div>
+    <div class="harvard-label">Harvard University<br>Data Science<br>Certificate</div>
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-header fade-in">
-    <span class="section-num">01</span>
-    <div class="section-line"></div>
-    <div>
-      <h2>About This <span>Project</span></h2>
-      <p class="section-sub">A rigorous end-to-end machine learning study in R</p>
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="sec-header fade-up">
+    <div class="sec-tag">01 — Overview</div>
+    <h2>Key <em>Metrics</em></h2>
+    <p class="sec-sub">Performance highlights across all models and datasets</p>
+  </div>
+
+  <div class="metrics fade-up">
+    <div class="metric">
+      <span class="metric-v">97.4%</span>
+      <span class="metric-l">Best Model (KNN)</span>
+    </div>
+    <div class="metric">
+      <span class="metric-v">96.5%</span>
+      <span class="metric-l">Best Ensemble</span>
+    </div>
+    <div class="metric">
+      <span class="metric-v">88.3%</span>
+      <span class="metric-l">Titanic RF</span>
+    </div>
+    <div class="metric">
+      <span class="metric-v">98.8%</span>
+      <span class="metric-l">SVD Variance</span>
+    </div>
+    <div class="metric">
+      <span class="metric-v">λ=135</span>
+      <span class="metric-l">Optimal Reg.</span>
     </div>
   </div>
 
-  <div class="about-grid">
-    <div class="fade-in">
-      <div class="about-text">
-        <p>This portfolio documents a complete machine learning curriculum implemented entirely in R, covering everything from fundamental probability theory to advanced ensemble methods.</p>
-        <p>Each section applies a different methodology to real-world datasets, with a focus on model evaluation, hyperparameter tuning, and understanding the mathematical foundations behind each algorithm.</p>
-        <p>Topics covered include classification, regression, dimensionality reduction (PCA/SVD), regularization, bootstrap methods, and ensemble learning.</p>
+  <div class="charts-grid">
+
+    <!-- BRCA BAR -->
+    <div class="chart-card fade-up" onclick="">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">🎗️ BRCA — Cancer Classification</div>
+          <div class="chart-sub">Breast cancer biopsy · 569 samples · 30 features</div>
+        </div>
+        <span class="chart-badge">4 Models</span>
       </div>
-      <div class="highlight-box">
-        <p>Key tools: <strong>caret</strong>, <strong>tidyverse</strong>, <strong>dslabs</strong>, <strong>randomForest</strong>, <strong>rpart</strong>, <strong>MASS</strong> — all models validated with proper train/test splits and cross-validation.</p>
+      <div class="chart-body">
+        <div class="bar-chart" id="brca-chart">
+          <div class="bar-row">
+            <span class="bar-label">Logistic Regression</span>
+            <div class="bar-track"><div class="bar-fill papaya" data-w="93.9">93.9%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">LOESS / GAM</span>
+            <div class="bar-track"><div class="bar-fill paradise" data-w="93.0">93.0%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Random Forest</span>
+            <div class="bar-track"><div class="bar-fill palm" data-w="94.8">94.8%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">KNN (k=9) ★</span>
+            <div class="bar-track"><div class="bar-fill best" data-w="97.4">97.4%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Ensemble</span>
+            <div class="bar-track"><div class="bar-fill papaya" data-w="96.5">96.5%</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-explain">
+        <strong>Key insight:</strong> KNN at k=9 outperformed all models including the ensemble, achieving 97.4% accuracy after proper feature scaling with <code>sweep()</code>. The most important predictor was <code>area_worst</code>.
       </div>
     </div>
-    <div class="fade-in">
-      <div class="skills-grid">
-        <div class="skill-tag"><span class="sk-icon">📊</span> Logistic Regression</div>
-        <div class="skill-tag"><span class="sk-icon">🌲</span> Random Forest</div>
-        <div class="skill-tag"><span class="sk-icon">🔵</span> K-Nearest Neighbors</div>
-        <div class="skill-tag"><span class="sk-icon">〰️</span> LOESS / GAM</div>
-        <div class="skill-tag"><span class="sk-icon">🌳</span> Decision Trees</div>
-        <div class="skill-tag"><span class="sk-icon">📉</span> LDA / QDA</div>
-        <div class="skill-tag"><span class="sk-icon">🧮</span> PCA / SVD</div>
-        <div class="skill-tag"><span class="sk-icon">🔗</span> Ensemble Methods</div>
-        <div class="skill-tag"><span class="sk-icon">📐</span> Regularization</div>
-        <div class="skill-tag"><span class="sk-icon">🔄</span> Bootstrap / CV</div>
-        <div class="skill-tag"><span class="sk-icon">📈</span> Bayesian Inference</div>
-        <div class="skill-tag"><span class="sk-icon">🎯</span> Model Evaluation</div>
+
+    <!-- TITANIC BAR -->
+    <div class="chart-card fade-up">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">🚢 Titanic Survival Prediction</div>
+          <div class="chart-sub">891 passengers · Sex, class, age, fare</div>
+        </div>
+        <span class="chart-badge">6 Models</span>
+      </div>
+      <div class="chart-body">
+        <div class="bar-chart" id="titanic-chart">
+          <div class="bar-row">
+            <span class="bar-label">Sex only</span>
+            <div class="bar-track"><div class="bar-fill papaya" data-w="78.8">78.8%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Class only</span>
+            <div class="bar-track"><div class="bar-fill paradise" data-w="68.2">68.2%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">GLM (4 predictors)</span>
+            <div class="bar-track"><div class="bar-fill palm" data-w="82.1">82.1%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Decision Tree</span>
+            <div class="bar-track"><div class="bar-fill papaya" data-w="84.9">84.9%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">KNN (k=15)</span>
+            <div class="bar-track"><div class="bar-fill paradise" data-w="73.2">73.2%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Random Forest ★</span>
+            <div class="bar-track"><div class="bar-fill best" data-w="88.3">88.3%</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-explain">
+        <strong>Key insight:</strong> Random Forest (mtry=2, ntree=100) was the best model with 88.3%. Females in 1st and 2nd class had the highest survival rates (&gt;90%). The decision tree revealed <strong>Sex → Age → Fare → Class</strong> as the key decision splits.
       </div>
     </div>
+
+    <!-- MNIST DONUT -->
+    <div class="chart-card fade-up">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">🔢 MNIST 27 — Ensemble Comparison</div>
+          <div class="chart-sub">Digit recognition (2s vs 7s) · 7 models</div>
+        </div>
+        <span class="chart-badge">Ensemble</span>
+      </div>
+      <div class="chart-body">
+        <div class="donut-wrap">
+          <svg class="donut-svg" width="160" height="160" viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="60" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="22"/>
+            <!-- GLM 77.5 -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#BD6809" stroke-width="22"
+              stroke-dasharray="28.9 348.2" stroke-dashoffset="0" opacity="0.9"/>
+            <!-- LDA 77.5 -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#9A3F4A" stroke-width="22"
+              stroke-dasharray="28.9 348.2" stroke-dashoffset="-28.9" opacity="0.9"/>
+            <!-- NB 81.5 -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#2F4731" stroke-width="22"
+              stroke-dasharray="30.4 346.7" stroke-dashoffset="-57.8" opacity="0.9"/>
+            <!-- KNN 83.5 -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#c45a67" stroke-width="22"
+              stroke-dasharray="31.2 346.0" stroke-dashoffset="-88.2" opacity="0.9"/>
+            <!-- Loess 83.5 -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#e8852a" stroke-width="22"
+              stroke-dasharray="31.2 346.0" stroke-dashoffset="-119.4" opacity="0.9"/>
+            <!-- QDA 81.5 -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#4a7550" stroke-width="22"
+              stroke-dasharray="30.4 346.7" stroke-dashoffset="-150.6" opacity="0.9"/>
+            <!-- RF 82.0 -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#7a2d38" stroke-width="22"
+              stroke-dasharray="30.6 346.5" stroke-dashoffset="-181.0" opacity="0.9"/>
+            <text x="80" y="75" text-anchor="middle" fill="#f0e6d3" font-family="Playfair Display" font-size="18" font-weight="700">82.5%</text>
+            <text x="80" y="93" text-anchor="middle" fill="#8a7a68" font-family="DM Sans" font-size="10">Ensemble</text>
+          </svg>
+          <div class="donut-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#BD6809"></div><span class="legend-label">GLM</span><span class="legend-val">77.5%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#9A3F4A"></div><span class="legend-label">LDA</span><span class="legend-val">77.5%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#2F4731"></div><span class="legend-label">Naive Bayes</span><span class="legend-val">81.5%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#c45a67"></div><span class="legend-label">KNN ★</span><span class="legend-val">83.5%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e8852a"></div><span class="legend-label">LOESS</span><span class="legend-val">83.5%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#4a7550"></div><span class="legend-label">QDA</span><span class="legend-val">81.5%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#7a2d38"></div><span class="legend-label">Random Forest</span><span class="legend-val">82.0%</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-explain">
+        <strong>Key insight:</strong> KNN and LOESS tied at 83.5%, beating the 7-model ensemble (82.5%). When only models with CV accuracy ≥ 80% were included (gamLoess, QDA), the filtered ensemble maintained 82.5% — confirming that weaker models don't always hurt.
+      </div>
+    </div>
+
+    <!-- KNN LINE -->
+    <div class="chart-card fade-up">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">📐 KNN Accuracy vs. k — Heights Dataset</div>
+          <div class="chart-sub">Sex prediction from height · F1 score optimization</div>
+        </div>
+        <span class="chart-badge">k = 1→101</span>
+      </div>
+      <div class="chart-body">
+        <svg viewBox="0 0 400 180" style="width:100%;overflow:visible">
+          <defs>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#BD6809"/>
+              <stop offset="100%" stop-color="#9A3F4A"/>
+            </linearGradient>
+          </defs>
+          <!-- Grid -->
+          <line x1="40" y1="10" x2="40" y2="150" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="40" y1="150" x2="390" y2="150" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="40" y1="10" x2="390" y2="10" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4"/>
+          <line x1="40" y1="50" x2="390" y2="50" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4"/>
+          <line x1="40" y1="90" x2="390" y2="90" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4"/>
+          <line x1="40" y1="130" x2="390" y2="130" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4"/>
+          <!-- Labels -->
+          <text x="35" y="153" fill="#8a7a68" font-size="9" text-anchor="end">0.50</text>
+          <text x="35" y="133" fill="#8a7a68" font-size="9" text-anchor="end">0.55</text>
+          <text x="35" y="93" fill="#8a7a68" font-size="9" text-anchor="end">0.60</text>
+          <text x="35" y="53" fill="#8a7a68" font-size="9" text-anchor="end">0.62</text>
+          <text x="35" y="13" fill="#8a7a68" font-size="9" text-anchor="end">0.65</text>
+          <!-- X labels -->
+          <text x="40" y="165" fill="#8a7a68" font-size="9" text-anchor="middle">1</text>
+          <text x="130" y="165" fill="#8a7a68" font-size="9" text-anchor="middle">25</text>
+          <text x="220" y="165" fill="#8a7a68" font-size="9" text-anchor="middle">51</text>
+          <text x="310" y="165" fill="#8a7a68" font-size="9" text-anchor="middle">75</text>
+          <text x="390" y="165" fill="#8a7a68" font-size="9" text-anchor="middle">101</text>
+          <!-- Line -->
+          <polyline points="40,140 60,138 80,130 100,118 120,108 140,62 160,58 175,13 195,18 215,25 235,35 255,42 275,50 295,60 315,68 335,75 355,85 375,92 390,98"
+            fill="none" stroke="url(#lineGrad)" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Peak dot -->
+          <circle cx="175" cy="13" r="5" fill="#c45a67"/>
+          <text x="175" y="8" fill="#c45a67" font-size="9" text-anchor="middle">k=40 ★</text>
+          <!-- Area -->
+          <polygon points="40,140 60,138 80,130 100,118 120,108 140,62 160,58 175,13 195,18 215,25 235,35 255,42 275,50 295,60 315,68 335,75 355,85 375,92 390,98 390,150 40,150"
+            fill="url(#lineGrad)" opacity="0.08"/>
+        </svg>
+      </div>
+      <div class="chart-explain">
+        <strong>Key insight:</strong> The optimal k=40 maximized F1 score at 0.619 for sex prediction from height. Lower k values overfit (high variance), while higher k values underfit. The curve peaks around k=40 before gradually declining.
+      </div>
+    </div>
+
+    <!-- SCHOOLS REGULARIZATION -->
+    <div class="chart-card fade-up">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">🏫 Schools Regularization — RMSE vs λ</div>
+          <div class="chart-sub">1000 simulated schools · Finding optimal penalty</div>
+        </div>
+        <span class="chart-badge">λ = 10→250</span>
+      </div>
+      <div class="chart-body">
+        <svg viewBox="0 0 400 180" style="width:100%;overflow:visible">
+          <defs>
+            <linearGradient id="regGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#2F4731"/>
+              <stop offset="100%" stop-color="#BD6809"/>
+            </linearGradient>
+          </defs>
+          <line x1="40" y1="150" x2="390" y2="150" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="40" y1="10" x2="40" y2="150" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="40" y1="50" x2="390" y2="50" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4"/>
+          <line x1="40" y1="100" x2="390" y2="100" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4"/>
+          <text x="35" y="153" fill="#8a7a68" font-size="9" text-anchor="end">Low</text>
+          <text x="35" y="103" fill="#8a7a68" font-size="9" text-anchor="end">Mid</text>
+          <text x="35" y="53" fill="#8a7a68" font-size="9" text-anchor="end">High</text>
+          <text x="40" y="165" fill="#8a7a68" font-size="9" text-anchor="middle">10</text>
+          <text x="150" y="165" fill="#8a7a68" font-size="9" text-anchor="middle">75</text>
+          <text x="218" y="165" fill="#8a7a68" font-size="9" text-anchor="middle">135</text>
+          <text x="310" y="165" fill="#8a7a68" font-size="9" text-anchor="middle">200</text>
+          <text x="390" y="165" fill="#8a7a68" font-size="9" text-anchor="middle">250</text>
+          <polyline points="40,30 80,28 120,29 160,33 218,80 260,95 300,110 340,125 390,140"
+            fill="none" stroke="url(#regGrad)" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="218" cy="80" r="5" fill="#BD6809"/>
+          <line x1="218" y1="10" x2="218" y2="150" stroke="#BD6809" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
+          <text x="225" y="75" fill="#BD6809" font-size="9">λ=135 ★</text>
+          <polygon points="40,30 80,28 120,29 160,33 218,80 260,95 300,110 340,125 390,140 390,150 40,150"
+            fill="url(#regGrad)" opacity="0.07"/>
+        </svg>
+      </div>
+      <div class="chart-explain">
+        <strong>Key insight:</strong> λ=135 minimizes RMSE when estimating school quality. Without regularization, small schools dominate top rankings due to high variance — not because they are actually better. Regularization "shrinks" noisy estimates toward the overall mean.
+      </div>
+    </div>
+
+    <!-- PCA VARIANCE -->
+    <div class="chart-card fade-up">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">🧬 BRCA PCA — Variance Explained</div>
+          <div class="chart-sub">30 principal components · Cancer features</div>
+        </div>
+        <span class="chart-badge">PC1 = 44.3%</span>
+      </div>
+      <div class="chart-body">
+        <div class="bar-chart">
+          <div class="bar-row">
+            <span class="bar-label">PC1</span>
+            <div class="bar-track"><div class="bar-fill best" data-w="44.3">44.3%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">PC2</span>
+            <div class="bar-track"><div class="bar-fill papaya" data-w="19.0">19.0%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">PC3</span>
+            <div class="bar-track"><div class="bar-fill paradise" data-w="9.4">9.4%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">PC4</span>
+            <div class="bar-track"><div class="bar-fill palm" data-w="6.6">6.6%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">PC5</span>
+            <div class="bar-track"><div class="bar-fill papaya" data-w="5.5">5.5%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">PC6</span>
+            <div class="bar-track"><div class="bar-fill paradise" data-w="4.0">4.0%</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">PC7 (→90%)</span>
+            <div class="bar-track"><div class="bar-fill palm" data-w="3.1">3.1%</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-explain">
+        <strong>Key insight:</strong> PC1 alone explains 44.3% of variance and clearly separates benign from malignant tumors — the only PC with non-overlapping IQRs between groups. Just 7 components are needed to explain 90% of total variance.
+      </div>
+    </div>
+
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- DATASETS -->
-<section id="datasets">
-  <div class="section-header fade-in">
-    <span class="section-num">02</span>
-    <div class="section-line"></div>
-    <div>
-      <h2>Datasets <span>Explored</span></h2>
-      <p class="section-sub">Real-world data from healthcare, film, education, and more</p>
-    </div>
+<!-- PLOTS FROM R -->
+<section id="plots" style="background:var(--card)">
+  <div class="sec-header fade-up">
+    <div class="sec-tag">02 — Visualizations</div>
+    <h2>Plots from <em>R</em></h2>
+    <p class="sec-sub">Real outputs generated during the analysis — click to expand and read the explanation</p>
   </div>
 
-  <div class="datasets-grid">
-    <div class="dataset-card fade-in">
-      <span class="dataset-icon">🎗️</span>
-      <div class="dataset-name">BRCA — Breast Cancer</div>
-      <div class="dataset-desc">569 biopsy samples with 30 nuclear features. Binary classification: Benign vs. Malignant. Includes PCA analysis and ensemble modeling.</div>
-      <div class="dataset-tags">
-        <span class="tag">Classification</span>
-        <span class="tag green">PCA</span>
-        <span class="tag purple">Ensemble</span>
+  <div class="plots-grid">
+
+    <div class="plot-card fade-up" onclick="openModal('m1')">
+      <img class="plot-img" src="Captura_de_tela_2026-03-28_142940.png" alt="Decision Tree Titanic">
+      <div class="plot-info">
+        <div class="plot-title">Titanic Decision Tree</div>
+        <div class="plot-desc">Classification tree for survival prediction — Sex, Age, SibSp, Fare and Pclass splits</div>
+        <span class="plot-tag">rpart · cp=0.02</span>
       </div>
     </div>
 
-    <div class="dataset-card fade-in">
-      <span class="dataset-icon">🚢</span>
-      <div class="dataset-name">Titanic Survival</div>
-      <div class="dataset-desc">891 passengers with features like sex, class, age and fare. Applied 7 different models and compared sensitivity, specificity and F1 scores.</div>
-      <div class="dataset-tags">
-        <span class="tag">Classification</span>
-        <span class="tag yellow">7 Models</span>
-        <span class="tag green">Confusion Matrix</span>
+    <div class="plot-card fade-up" onclick="openModal('m2')">
+      <img class="plot-img" src="Captura_de_tela_2026-03-28_144030.png" alt="MovieLens Genres">
+      <div class="plot-info">
+        <div class="plot-title">MovieLens — Genre Effect</div>
+        <div class="plot-desc">Average rating ± SE by genre combination. Comedy has the lowest average (3.27 stars)</div>
+        <span class="plot-tag">movielens · error bars</span>
       </div>
     </div>
 
-    <div class="dataset-card fade-in">
-      <span class="dataset-icon">🎬</span>
-      <div class="dataset-name">MovieLens Ratings</div>
-      <div class="dataset-desc">Movie ratings dataset with timestamps and genres. Analyzed time effects, genre bias, and regularization for recommendation systems.</div>
-      <div class="dataset-tags">
-        <span class="tag">Regression</span>
-        <span class="tag purple">Regularization</span>
-        <span class="tag yellow">Time Series</span>
+    <div class="plot-card fade-up" onclick="openModal('m3')">
+      <img class="plot-img" src="Captura_de_tela_2026-03-28_144213.png" alt="MovieLens Time Effect">
+      <div class="plot-info">
+        <div class="plot-title">MovieLens — Time Effect</div>
+        <div class="plot-desc">Weekly average rating over time (1995–2017) with LOESS smoother — mild downward trend</div>
+        <span class="plot-tag">movielens · LOESS</span>
       </div>
     </div>
 
-    <div class="dataset-card fade-in">
-      <span class="dataset-icon">🔢</span>
-      <div class="dataset-name">MNIST 27</div>
-      <div class="dataset-desc">Digit recognition subset (2s and 7s). Used for ensemble learning with 7 models including GLM, LDA, KNN, Random Forest and GAM Loess.</div>
-      <div class="dataset-tags">
-        <span class="tag">Classification</span>
-        <span class="tag purple">Ensemble</span>
-        <span class="tag green">7 Models</span>
+    <div class="plot-card fade-up" onclick="openModal('m4')">
+      <img class="plot-img" src="Captura_de_tela_2026-03-28_144337.png" alt="MovieLens Ratings per Year">
+      <div class="plot-info">
+        <div class="plot-title">Rating Frequency vs. Average</div>
+        <div class="plot-desc">More frequently rated films have higher average ratings — popularity bias confirmed</div>
+        <span class="plot-tag">movielens · scatter</span>
       </div>
     </div>
 
-    <div class="dataset-card fade-in">
-      <span class="dataset-icon">🌸</span>
-      <div class="dataset-name">Iris Species</div>
-      <div class="dataset-desc">Classic flower dataset. Explored cutoff optimization for single-feature classification and compared Petal.Length vs Petal.Width predictors.</div>
-      <div class="dataset-tags">
-        <span class="tag">Classification</span>
-        <span class="tag yellow">Cutoff Search</span>
+    <div class="plot-card fade-up" onclick="openModal('m5')">
+      <img class="plot-img" src="Captura_de_tela_2026-03-28_144442.png" alt="MovieLens Boxplot Year">
+      <div class="plot-info">
+        <div class="plot-title">Ratings by Release Year</div>
+        <div class="plot-desc">Boxplot of ratings count per film by release year — 1995 has the highest median</div>
+        <span class="plot-tag">movielens · boxplot</span>
       </div>
     </div>
 
-    <div class="dataset-card fade-in">
-      <span class="dataset-icon">🧬</span>
-      <div class="dataset-name">Tissue Gene Expression</div>
-      <div class="dataset-desc">High-dimensional gene expression data for tissue type prediction. Applied KNN and Random Forest with dimensionality challenges.</div>
-      <div class="dataset-tags">
-        <span class="tag">Classification</span>
-        <span class="tag green">KNN</span>
-        <span class="tag purple">Random Forest</span>
+    <div class="plot-card fade-up" onclick="openModal('m6')">
+      <img class="plot-img" src="Captura_de_tela_2026-03-28_150030.png" alt="SVD Heatmap">
+      <div class="plot-info">
+        <div class="plot-title">SVD — V Matrix Heatmap</div>
+        <div class="plot-desc">The right singular vectors reveal structure in the 24-subject grade matrix (Math, Science, Arts)</div>
+        <span class="plot-tag">SVD · my_image()</span>
       </div>
     </div>
 
-    <div class="dataset-card fade-in">
-      <span class="dataset-icon">🏫</span>
-      <div class="dataset-name">1000 Schools Simulation</div>
-      <div class="dataset-desc">Simulated dataset exploring the "small school effect." Demonstrated how regularization (λ=135) reduces noise-driven bias in rankings.</div>
-      <div class="dataset-tags">
-        <span class="tag">Regression</span>
-        <span class="tag purple">Regularization</span>
-        <span class="tag yellow">Simulation</span>
+    <div class="plot-card fade-up" onclick="openModal('m7')">
+      <img class="plot-img" src="Captura_de_tela_2026-03-28_150321.png" alt="Correlation Heatmap">
+      <div class="plot-info">
+        <div class="plot-title">Correlation Matrix — Student Grades</div>
+        <div class="plot-desc">High within-subject correlations, moderate between Math/Science, weaker with Arts</div>
+        <span class="plot-tag">SVD · cor(y)</span>
       </div>
     </div>
 
-    <div class="dataset-card fade-in">
-      <span class="dataset-icon">📐</span>
-      <div class="dataset-name">Student Grades (SVD)</div>
-      <div class="dataset-desc">100 students × 24 subjects. Used Singular Value Decomposition to identify that just 3 components explain 98.8% of total variance.</div>
-      <div class="dataset-tags">
-        <span class="tag">SVD / PCA</span>
-        <span class="tag green">98.8% Variance</span>
+    <div class="plot-card fade-up" onclick="openModal('m8')">
+      <img class="plot-img" src="Captura_de_tela_2026-03-28_150346.png" alt="Grade Image">
+      <div class="plot-info">
+        <div class="plot-title">Student Grades Heatmap</div>
+        <div class="plot-desc">100 students × 24 subjects. Top students (red) cluster at top, with 3 subject groupings visible</div>
+        <span class="plot-tag">SVD · my_image(y)</span>
       </div>
     </div>
 
-    <div class="dataset-card fade-in">
-      <span class="dataset-icon">📏</span>
-      <div class="dataset-name">Reported Heights</div>
-      <div class="dataset-desc">Sex and height survey from Harvard courses. Built a classifier based on class type (inclass/online) achieving 63% accuracy.</div>
-      <div class="dataset-tags">
-        <span class="tag">Classification</span>
-        <span class="tag yellow">Confusion Matrix</span>
+    <div class="plot-card fade-up" onclick="openModal('m9')">
+      <img class="plot-img" src="Captura_de_tela_2026-03-28_151857.png" alt="BRCA PCA Boxplot">
+      <div class="plot-info">
+        <div class="plot-title">BRCA — PCA Boxplots (B vs M)</div>
+        <div class="plot-desc">PC1 is the only component with non-overlapping IQRs between Benign and Malignant tumors</div>
+        <span class="plot-tag">BRCA · PCA · boxplot</span>
       </div>
     </div>
+
+    <div class="plot-card fade-up" onclick="openModal('m10')">
+      <img class="plot-img" src="Captura_de_tela_2026-03-28_151927.png" alt="BRCA PCA Scatter">
+      <div class="plot-info">
+        <div class="plot-title">BRCA — PC1 vs PC2 Scatter</div>
+        <div class="plot-desc">Malignant (teal) clearly separated from Benign (pink) along PC1 axis — strong signal</div>
+        <span class="plot-tag">BRCA · PCA · scatter</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
+<!-- MODALS -->
+<div class="modal-overlay" id="m1" onclick="closeModal(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('m1').classList.remove('active')">✕</button>
+    <img class="modal-img" src="Captura_de_tela_2026-03-28_142940.png">
+    <div class="modal-content">
+      <div class="modal-title">Titanic — Decision Tree (rpart)</div>
+      <div class="modal-text">
+        <p>This decision tree was trained on the Titanic dataset using <code>caret::train()</code> with <code>method="rpart"</code> and complexity parameter <code>cp=0.02</code>.</p>
+        <br>
+        <p><strong>How to read it:</strong> Start at the top node — the first split is on <em>Sex (male ≥ 0.5)</em>. Going left means the condition is TRUE (male passengers), going right means FALSE (female passengers).</p>
+        <br>
+        <p><strong>Key splits:</strong> Male passengers are further split by Age (&lt;13 = children, more likely to survive) and SibSp (siblings aboard). Female passengers are split by Pclass and Fare — women in 1st/2nd class had &gt;90% survival rates. This tree achieved <strong>84.9% accuracy</strong> on the test set.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m2" onclick="closeModal(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('m2').classList.remove('active')">✕</button>
+    <img class="modal-img" src="Captura_de_tela_2026-03-28_144030.png">
+    <div class="modal-content">
+      <div class="modal-title">MovieLens — Genre Effect on Ratings</div>
+      <div class="modal-text">
+        <p>This error bar plot shows the average rating (± standard error) for each genre combination with more than 1,000 ratings in the MovieLens dataset.</p>
+        <br>
+        <p><strong>Key finding:</strong> <em>Comedy</em> has the lowest average rating (3.27 stars), while <em>Comedy|Romance</em> and <em>Drama|War</em> top the chart near 4.0 stars. The error bars are small, indicating high confidence in these estimates.</p>
+        <br>
+        <p>This confirms a <strong>genre bias effect</strong> — knowing the genre combination of a film helps predict how it will be rated. This is an important feature for recommendation system models.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m3" onclick="closeModal(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('m3').classList.remove('active')">✕</button>
+    <img class="modal-img" src="Captura_de_tela_2026-03-28_144213.png">
+    <div class="modal-content">
+      <div class="modal-title">MovieLens — Time Effect on Ratings</div>
+      <div class="modal-text">
+        <p>Weekly average movie ratings from 1995 to 2017, with a LOESS smoother (blue line) showing the trend over time.</p>
+        <br>
+        <p><strong>Key finding:</strong> Ratings started higher (~3.7) in the mid-1990s and gradually declined to ~3.5 by 2017, with the LOESS curve showing a mild but consistent downward trend. This suggests a small but real <strong>temporal effect</strong> on ratings.</p>
+        <br>
+        <p>This supports including a time component <em>f(d<sub>u,i</sub>)</em> in the recommendation system model — where d<sub>u,i</sub> represents the date user u rated movie i.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m4" onclick="closeModal(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('m4').classList.remove('active')">✕</button>
+    <img class="modal-img" src="Captura_de_tela_2026-03-28_144337.png">
+    <div class="modal-content">
+      <div class="modal-title">MovieLens — Rating Frequency vs. Average Rating</div>
+      <div class="modal-text">
+        <p>Scatter plot of average rating against ratings per year for films released in 1993 or later, with a GAM smoother.</p>
+        <br>
+        <p><strong>Key finding:</strong> There is a clear <strong>positive relationship</strong> — movies that are rated more frequently also tend to receive higher average ratings. This is not because being popular makes a film better, but because <em>popular films attract more ratings from viewers who already liked them</em>.</p>
+        <br>
+        <p>This popularity bias is important for recommendation systems: missing ratings for unpopular films should be filled with a value <em>below</em> the overall average to account for this effect.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m5" onclick="closeModal(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('m5').classList.remove('active')">✕</button>
+    <img class="modal-img" src="Captura_de_tela_2026-03-28_144442.png">
+    <div class="modal-content">
+      <div class="modal-title">MovieLens — Number of Ratings by Release Year</div>
+      <div class="modal-text">
+        <p>Boxplot showing the distribution of total ratings per film, grouped by release year, with a square root transformation on the y-axis.</p>
+        <br>
+        <p><strong>Key finding:</strong> Films from around <em>1995</em> have the highest median number of ratings. The distribution rises from the 1970s, peaks around 1993–1996, then declines for more recent films — simply because newer films have had less time to accumulate ratings.</p>
+        <br>
+        <p>This confirms the <strong>recency bias</strong>: newer films appear less popular not because they are worse, but because fewer users have had time to watch and rate them.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m6" onclick="closeModal(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('m6').classList.remove('active')">✕</button>
+    <img class="modal-img" src="Captura_de_tela_2026-03-28_150030.png">
+    <div class="modal-content">
+      <div class="modal-title">SVD — V Matrix Heatmap (Student Grades)</div>
+      <div class="modal-text">
+        <p>This heatmap shows the V matrix from the Singular Value Decomposition of a 100-student × 24-subject grade dataset (8 Math, 8 Science, 8 Arts tests).</p>
+        <br>
+        <p><strong>How to read it:</strong> Each column is a right singular vector (principal direction in feature space). The colors represent the magnitude and direction of each feature's contribution — red = positive, blue = negative.</p>
+        <br>
+        <p><strong>Key finding:</strong> The first column is nearly constant across all subjects — meaning PC1 captures <em>overall ability</em>. The second column shows a contrast between Arts vs. Math/Science. The third differentiates Math from Science. Together, 3 components explain <strong>98.8% of variance</strong>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m7" onclick="closeModal(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('m7').classList.remove('active')">✕</button>
+    <img class="modal-img" src="Captura_de_tela_2026-03-28_150321.png">
+    <div class="modal-content">
+      <div class="modal-title">Correlation Matrix — Student Grade Data</div>
+      <div class="modal-text">
+        <p>Heatmap of correlations between all 24 subject scores (8 Math, 8 Science, 8 Arts), where red = positive correlation and blue = negative.</p>
+        <br>
+        <p><strong>Key finding:</strong> There are three visible blocks of high correlation — one per subject group. Within each block (e.g., Math 1 through Math 8), correlations are very high. Between Math and Science, correlations are moderate. Between Arts and Math/Science, correlations are weaker.</p>
+        <br>
+        <p>This structure motivates using SVD/PCA to capture these patterns efficiently — rather than working with all 24 variables individually.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m8" onclick="closeModal(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('m8').classList.remove('active')">✕</button>
+    <img class="modal-img" src="Captura_de_tela_2026-03-28_150346.png">
+    <div class="modal-content">
+      <div class="modal-title">Student Grades Heatmap — my_image(y)</div>
+      <div class="modal-text">
+        <p>Raw grade matrix visualization: 100 students (rows, top = best) × 24 subjects (columns: 8 Math, 8 Science, 8 Arts). Red = high score (A+), blue = low score (F), white = average (C).</p>
+        <br>
+        <p><strong>Key finding:</strong> The clear gradient from red (top) to blue (bottom) shows that overall student ability drives most of the variation. The three visible column groupings confirm that subject-level effects (Math vs. Science vs. Arts) are real but secondary.</p>
+        <br>
+        <p>This visual motivates SVD — students who do well tend to do well across all subjects, which is exactly what PC1 (overall ability) captures.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m9" onclick="closeModal(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('m9').classList.remove('active')">✕</button>
+    <img class="modal-img" src="Captura_de_tela_2026-03-28_151857.png">
+    <div class="modal-content">
+      <div class="modal-title">BRCA — PCA Boxplots by Tumor Type</div>
+      <div class="modal-text">
+        <p>Boxplots of the first 10 principal components, grouped by tumor type: B = Benign, M = Malignant.</p>
+        <br>
+        <p><strong>Key finding:</strong> <strong>PC1 is the only component where the IQRs do not overlap</strong> between B and M groups — malignant tumors have consistently higher PC1 values. All other PCs (PC2–PC10) show overlapping distributions, meaning they carry much less discriminatory power.</p>
+        <br>
+        <p>This confirms that PC1 (explaining 44.3% of variance) is the most diagnostically relevant dimension — and explains why KNN achieved 97.4% accuracy on scaled features that emphasize this separation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m10" onclick="closeModal(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('m10').classList.remove('active')">✕</button>
+    <img class="modal-img" src="Captura_de_tela_2026-03-28_151927.png">
+    <div class="modal-content">
+      <div class="modal-title">BRCA — PC1 vs PC2 Scatter Plot</div>
+      <div class="modal-text">
+        <p>Scatter plot of the first two principal components for all 569 BRCA biopsy samples. Pink = Benign (B), Teal = Malignant (M).</p>
+        <br>
+        <p><strong>Key finding:</strong> The two groups are clearly separated along the PC1 axis (horizontal). Malignant tumors (teal) occupy higher PC1 values, while Benign tumors (pink) cluster at lower PC1 values. PC2 provides some additional separation but less dramatically.</p>
+        <br>
+        <p>This visualization is powerful: it shows that <em>just two numbers per patient</em> (their PC1 and PC2 scores) are enough to distinguish most cancer cases from benign ones — a key insight for dimensionality reduction in medical diagnostics.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="divider"></div>
 
-<!-- RESULTS -->
-<section id="results" class="results-section">
-  <div class="section-header fade-in">
-    <span class="section-num">03</span>
-    <div class="section-line"></div>
-    <div>
-      <h2>Model <span>Results</span></h2>
-      <p class="section-sub">Accuracy metrics across all datasets and algorithms</p>
-    </div>
+<!-- FINDINGS -->
+<section id="findings">
+  <div class="sec-header fade-up">
+    <div class="sec-tag">03 — Key Findings</div>
+    <h2>What the <em>Data</em> Revealed</h2>
+    <p class="sec-sub">The most important insights from applying ML theory to real datasets</p>
   </div>
 
-  <div class="metrics-row fade-in">
-    <div class="metric-card">
-      <span class="metric-val">97.4%</span>
-      <span class="metric-label">Best Single Model</span>
+  <div class="findings-grid">
+    <div class="finding-card fade-up">
+      <span class="finding-n">97.4%</span>
+      <div class="finding-title">KNN Dominates BRCA</div>
+      <div class="finding-desc">After proper Z-score scaling with <code>sweep()</code>, KNN at k=9 outperformed all individual models and even the 4-model ensemble on cancer diagnosis.</div>
     </div>
-    <div class="metric-card">
-      <span class="metric-val">96.5%</span>
-      <span class="metric-label">Best Ensemble</span>
+    <div class="finding-card fade-up">
+      <span class="finding-n">λ=135</span>
+      <div class="finding-title">Regularization Fixes Rankings</div>
+      <div class="finding-desc">The "small school effect" — small schools dominating top rankings due to noise — is corrected entirely by regularization. Optimal λ=135 minimizes RMSE.</div>
     </div>
-    <div class="metric-card">
-      <span class="metric-val">88.3%</span>
-      <span class="metric-label">Titanic Best</span>
+    <div class="finding-card fade-up">
+      <span class="finding-n">98.8%</span>
+      <div class="finding-title">3 SVD Components Suffice</div>
+      <div class="finding-desc">Just 3 singular vectors capture 98.8% of variance in 100×24 grade data. Component 1 = ability, 2 = Arts vs STEM, 3 = Math vs Science.</div>
     </div>
-    <div class="metric-card">
-      <span class="metric-val">98.8%</span>
-      <span class="metric-label">SVD Variance Expl.</span>
+    <div class="finding-card fade-up">
+      <span class="finding-n">7.4×</span>
+      <div class="finding-title">Bayes Theorem in Practice</div>
+      <div class="finding-desc">A positive test (85% sensitivity, 90% specificity) for a disease with 2% prevalence increases the probability of disease by 7.4×, from 2% to 14.8%.</div>
     </div>
-    <div class="metric-card">
-      <span class="metric-val">135</span>
-      <span class="metric-label">Optimal λ (Schools)</span>
+    <div class="finding-card fade-up">
+      <span class="finding-n">75%</span>
+      <div class="finding-title">Data Leakage Demonstrated</div>
+      <div class="finding-desc">Selecting 108 "significant" predictors from random data before cross-validation inflated accuracy to 75% — a textbook case of data leakage invalidating results.</div>
     </div>
-  </div>
-
-  <div class="results-grid fade-in">
-
-    <!-- BRCA -->
-    <div class="result-block">
-      <div class="result-block-header">
-        <span class="result-block-title">🎗️ BRCA — Cancer Classification</span>
-        <span class="result-block-badge">4 Models</span>
-      </div>
-      <table>
-        <thead>
-          <tr><th>Model</th><th>Accuracy</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Logistic Regression (GLM)</td><td><div class="acc-bar"><span class="acc-value">93.9%</span><div class="acc-track"><div class="acc-fill" style="width:93.9%"></div></div></div></td></tr>
-          <tr><td>LOESS</td><td><div class="acc-bar"><span class="acc-value">93.0%</span><div class="acc-track"><div class="acc-fill" style="width:93%"></div></div></div></td></tr>
-          <tr><td>Random Forest (mtry=3)</td><td><div class="acc-bar"><span class="acc-value">94.8%</span><div class="acc-track"><div class="acc-fill" style="width:94.8%"></div></div></div></td></tr>
-          <tr class="best-row"><td>KNN (k=9)</td><td><div class="acc-bar"><span class="acc-value">97.4%</span><div class="acc-track"><div class="acc-fill" style="width:97.4%"></div></div></div></td></tr>
-          <tr><td>Ensemble (majority vote)</td><td><div class="acc-bar"><span class="acc-value">96.5%</span><div class="acc-track"><div class="acc-fill" style="width:96.5%"></div></div></div></td></tr>
-        </tbody>
-      </table>
+    <div class="finding-card fade-up">
+      <span class="finding-n">PC1</span>
+      <div class="finding-title">One Component Separates Cancer</div>
+      <div class="finding-desc">PC1 alone (44.3% of variance) separates malignant from benign tumors with no IQR overlap. All 9 remaining components show overlapping distributions.</div>
     </div>
-
-    <!-- TITANIC -->
-    <div class="result-block">
-      <div class="result-block-header">
-        <span class="result-block-title">🚢 Titanic Survival</span>
-        <span class="result-block-badge">7 Models</span>
-      </div>
-      <table>
-        <thead>
-          <tr><th>Model</th><th>Accuracy</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Sex only</td><td><div class="acc-bar"><span class="acc-value">78.8%</span><div class="acc-track"><div class="acc-fill" style="width:78.8%"></div></div></div></td></tr>
-          <tr><td>Class only</td><td><div class="acc-bar"><span class="acc-value">68.2%</span><div class="acc-track"><div class="acc-fill" style="width:68.2%"></div></div></div></td></tr>
-          <tr><td>GLM (4 predictors)</td><td><div class="acc-bar"><span class="acc-value">82.1%</span><div class="acc-track"><div class="acc-fill" style="width:82.1%"></div></div></div></td></tr>
-          <tr><td>KNN (k=15)</td><td><div class="acc-bar"><span class="acc-value">73.2%</span><div class="acc-track"><div class="acc-fill" style="width:73.2%"></div></div></div></td></tr>
-          <tr><td>Decision Tree (cp=0.02)</td><td><div class="acc-bar"><span class="acc-value">84.9%</span><div class="acc-track"><div class="acc-fill" style="width:84.9%"></div></div></div></td></tr>
-          <tr class="best-row"><td>Random Forest (mtry=2)</td><td><div class="acc-bar"><span class="acc-value">88.3%</span><div class="acc-track"><div class="acc-fill" style="width:88.3%"></div></div></div></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- MNIST -->
-    <div class="result-block">
-      <div class="result-block-header">
-        <span class="result-block-title">🔢 MNIST 27 — Digit Recognition</span>
-        <span class="result-block-badge">Ensemble</span>
-      </div>
-      <table>
-        <thead>
-          <tr><th>Model</th><th>Accuracy</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>GLM</td><td><div class="acc-bar"><span class="acc-value">77.5%</span><div class="acc-track"><div class="acc-fill" style="width:77.5%"></div></div></div></td></tr>
-          <tr><td>LDA</td><td><div class="acc-bar"><span class="acc-value">77.5%</span><div class="acc-track"><div class="acc-fill" style="width:77.5%"></div></div></div></td></tr>
-          <tr><td>Naive Bayes</td><td><div class="acc-bar"><span class="acc-value">81.5%</span><div class="acc-track"><div class="acc-fill" style="width:81.5%"></div></div></div></td></tr>
-          <tr class="best-row"><td>KNN</td><td><div class="acc-bar"><span class="acc-value">83.5%</span><div class="acc-track"><div class="acc-fill" style="width:83.5%"></div></div></div></td></tr>
-          <tr><td>LOESS (gamLoess)</td><td><div class="acc-bar"><span class="acc-value">83.5%</span><div class="acc-track"><div class="acc-fill" style="width:83.5%"></div></div></div></td></tr>
-          <tr><td>Ensemble (7 models)</td><td><div class="acc-bar"><span class="acc-value">82.5%</span><div class="acc-track"><div class="acc-fill" style="width:82.5%"></div></div></div></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- TISSUE -->
-    <div class="result-block">
-      <div class="result-block-header">
-        <span class="result-block-title">🧬 Tissue Gene Expression</span>
-        <span class="result-block-badge">KNN</span>
-      </div>
-      <table>
-        <thead>
-          <tr><th>k</th><th>Accuracy</th></tr>
-        </thead>
-        <tbody>
-          <tr class="best-row"><td>k = 1</td><td><div class="acc-bar"><span class="acc-value">100%</span><div class="acc-track"><div class="acc-fill" style="width:100%"></div></div></div></td></tr>
-          <tr class="best-row"><td>k = 3</td><td><div class="acc-bar"><span class="acc-value">100%</span><div class="acc-track"><div class="acc-fill" style="width:100%"></div></div></div></td></tr>
-          <tr><td>k = 5</td><td><div class="acc-bar"><span class="acc-value">99.0%</span><div class="acc-track"><div class="acc-fill" style="width:99%"></div></div></div></td></tr>
-          <tr><td>k = 7</td><td><div class="acc-bar"><span class="acc-value">94.8%</span><div class="acc-track"><div class="acc-fill" style="width:94.8%"></div></div></div></td></tr>
-          <tr><td>k = 9</td><td><div class="acc-bar"><span class="acc-value">94.8%</span><div class="acc-track"><div class="acc-fill" style="width:94.8%"></div></div></div></td></tr>
-          <tr><td>k = 11</td><td><div class="acc-bar"><span class="acc-value">93.8%</span><div class="acc-track"><div class="acc-fill" style="width:93.8%"></div></div></div></td></tr>
-        </tbody>
-      </table>
-    </div>
-
   </div>
 </section>
 
 <div class="divider"></div>
 
 <!-- MODELS -->
-<section id="models">
-  <div class="section-header fade-in">
-    <span class="section-num">04</span>
-    <div class="section-line"></div>
-    <div>
-      <h2>Algorithms <span>Used</span></h2>
-      <p class="section-sub">10+ machine learning methods implemented and evaluated</p>
-    </div>
+<section style="background:var(--card)">
+  <div class="sec-header fade-up">
+    <div class="sec-tag">04 — Algorithms</div>
+    <h2>Models <em>Implemented</em></h2>
+    <p class="sec-sub">All methods applied, tuned, and evaluated with proper cross-validation</p>
   </div>
 
-  <div class="models-grid fade-in">
+  <div class="models-grid fade-up">
     <div class="model-card">
-      <div class="model-icon" style="background:rgba(0,212,255,0.1)">📈</div>
+      <div class="model-icon" style="background:rgba(189,104,9,0.12)">📈</div>
       <div class="model-name">Logistic Regression</div>
-      <div class="model-desc">Linear boundary classification with probability outputs. Used across Titanic and BRCA datasets.</div>
+      <div class="model-acc">BRCA: 93.9%</div>
+      <div class="model-desc">Linear boundary classification. Used across Titanic, BRCA and MNIST datasets.</div>
     </div>
     <div class="model-card">
-      <div class="model-icon" style="background:rgba(124,58,237,0.1)">🌲</div>
+      <div class="model-icon" style="background:rgba(154,63,74,0.12)">🌲</div>
       <div class="model-name">Random Forest</div>
-      <div class="model-desc">Bagged decision trees with mtry tuning. Best model for Titanic (88.3%). Key variable: <code>area_worst</code>.</div>
+      <div class="model-acc">Titanic: 88.3%</div>
+      <div class="model-desc">Bagged decision trees. Best for Titanic. Key variable: <code>area_worst</code> in BRCA.</div>
     </div>
     <div class="model-card">
-      <div class="model-icon" style="background:rgba(16,185,129,0.1)">🔵</div>
+      <div class="model-icon" style="background:rgba(47,71,49,0.15)">🔵</div>
       <div class="model-name">K-Nearest Neighbors</div>
-      <div class="model-desc">Distance-based classifier. Best model for BRCA (97.4% at k=9). Sensitive to scale — requires normalization.</div>
+      <div class="model-acc">BRCA: 97.4%</div>
+      <div class="model-desc">Distance-based. Best overall model. Requires scaling — very sensitive to feature normalization.</div>
     </div>
     <div class="model-card">
-      <div class="model-icon" style="background:rgba(245,158,11,0.1)">〰️</div>
+      <div class="model-icon" style="background:rgba(189,104,9,0.12)">〰️</div>
       <div class="model-name">LOESS / GAM</div>
-      <div class="model-desc">Local polynomial regression. Non-parametric smoother used for continuous prediction tasks.</div>
+      <div class="model-acc">BRCA: 93.0%</div>
+      <div class="model-desc">Local polynomial regression. Non-parametric smoother for continuous and classification tasks.</div>
     </div>
     <div class="model-card">
-      <div class="model-icon" style="background:rgba(239,68,68,0.1)">🌳</div>
+      <div class="model-icon" style="background:rgba(154,63,74,0.12)">🌳</div>
       <div class="model-name">Decision Trees</div>
-      <div class="model-desc">Interpretable splits using <code>rpart</code>. Tuned via complexity parameter cp. Used for Titanic and tissue data.</div>
+      <div class="model-acc">Titanic: 84.9%</div>
+      <div class="model-desc">Interpretable splits via <code>rpart</code>. Tuned with complexity parameter <code>cp</code>.</div>
     </div>
     <div class="model-card">
-      <div class="model-icon" style="background:rgba(0,212,255,0.1)">📊</div>
+      <div class="model-icon" style="background:rgba(47,71,49,0.15)">📊</div>
       <div class="model-name">LDA / QDA</div>
-      <div class="model-desc">Linear and quadratic discriminant analysis. Fast, parametric classifiers assuming Gaussian distributions.</div>
+      <div class="model-acc">MNIST: 77.5%</div>
+      <div class="model-desc">Linear/quadratic discriminant analysis. Fast parametric classifiers assuming Gaussian distributions.</div>
     </div>
     <div class="model-card">
-      <div class="model-icon" style="background:rgba(124,58,237,0.1)">🧮</div>
+      <div class="model-icon" style="background:rgba(189,104,9,0.12)">🧮</div>
       <div class="model-name">PCA / SVD</div>
-      <div class="model-desc">Dimensionality reduction. 3 components explain 98.8% of grade variance. PC1 separates cancer types clearly.</div>
+      <div class="model-acc">98.8% variance</div>
+      <div class="model-desc">Dimensionality reduction. 3 components suffice for student grades, PC1 separates cancer types.</div>
     </div>
     <div class="model-card">
-      <div class="model-icon" style="background:rgba(16,185,129,0.1)">🗳️</div>
-      <div class="model-name">Ensemble (Majority Vote)</div>
-      <div class="model-desc">Combined predictions from multiple models. Achieved 96.5% on BRCA — balancing bias and variance.</div>
+      <div class="model-icon" style="background:rgba(154,63,74,0.12)">🗳️</div>
+      <div class="model-name">Ensemble (Vote)</div>
+      <div class="model-acc">BRCA: 96.5%</div>
+      <div class="model-desc">Majority vote across 4–7 models. Reduces variance but can be outperformed by a single strong model.</div>
     </div>
   </div>
 </section>
-
-<div class="divider"></div>
-
-<!-- FINDINGS -->
-<section id="findings">
-  <div class="section-header fade-in">
-    <span class="section-num">05</span>
-    <div class="section-line"></div>
-    <div>
-      <h2>Key <span>Findings</span></h2>
-      <p class="section-sub">Insights from applying ML theory to real data</p>
-    </div>
-  </div>
-
-  <div class="findings-grid fade-in">
-    <div class="finding-card">
-      <span class="finding-num">97.4%</span>
-      <div class="finding-title">KNN Dominates on BRCA</div>
-      <div class="finding-desc">After proper scaling with <code>sweep()</code>, KNN at k=9 outperformed all other models on the breast cancer dataset, including the ensemble.</div>
-    </div>
-    <div class="finding-card">
-      <span class="finding-num">λ=135</span>
-      <div class="finding-title">Regularization Eliminates Bias</div>
-      <div class="finding-desc">The "small school effect" — where small schools appear top-ranked due to high variance — is corrected by regularization with optimal λ=135.</div>
-    </div>
-    <div class="finding-card">
-      <span class="finding-num">98.8%</span>
-      <div class="finding-title">SVD Reveals Data Structure</div>
-      <div class="finding-desc">Only 3 singular value components capture 98.8% of variance in student grades. Component 1 = overall ability, 2 = arts vs. STEM, 3 = math vs. science.</div>
-    </div>
-    <div class="finding-card">
-      <span class="finding-num">14.2×</span>
-      <div class="finding-title">Positive Test Increases Risk</div>
-      <div class="finding-desc">Using Bayes' theorem on a disease with 2% prevalence: a positive test (85% sensitivity, 90% specificity) increases disease probability by 7.4×.</div>
-    </div>
-    <div class="finding-card">
-      <span class="finding-num">75%</span>
-      <div class="finding-title">Data Leakage Warning</div>
-      <div class="finding-desc">Selecting predictors using the full dataset before cross-validation artificially inflated accuracy to 75% on completely random data — a textbook leakage case.</div>
-    </div>
-    <div class="finding-card">
-      <span class="finding-num">PC1</span>
-      <div class="finding-title">PCA Separates Cancer Types</div>
-      <div class="finding-desc">The first principal component alone clearly separates malignant from benign tumors in the BRCA dataset, with no IQR overlap between groups.</div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-left">
-    <div class="footer-name">Sarah Silva</div>
-    <div class="footer-sub">Machine Learning · R Programming · Data Science</div>
-    <div class="footer-copy">Built with R · dslabs · caret · tidyverse</div>
+  <div>
+    <div class="footer-brand">Sarah Silva</div>
+    <div class="footer-sub">Machine Learning · Harvard Data Science · R Programming</div>
   </div>
   <div class="footer-links">
-    <a href="https://www.linkedin.com/in/sarah-silva" target="_blank" class="footer-link">
+    <a href="https://www.linkedin.com/in/sarahgleicesilva/" target="_blank" class="footer-link">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-      LinkedIn
+      LinkedIn ↗
     </a>
   </div>
 </footer>
 
 <script>
-  // Intersection Observer for fade-in animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.classList.add('visible');
-        }, i * 80);
-        observer.unobserve(entry.target);
-      }
+// Fade-up observer
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting){
+      setTimeout(() => e.target.classList.add('visible'), i * 100);
+      obs.unobserve(e.target);
+    }
+  });
+}, {threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// Animate bars
+const barObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.querySelectorAll('.bar-fill[data-w]').forEach(bar => {
+        const w = bar.getAttribute('data-w');
+        setTimeout(() => { bar.style.width = w + '%'; }, 200);
+      });
+      barObs.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.3});
+document.querySelectorAll('.chart-card').forEach(el => barObs.observe(el));
+
+// Modal
+function openModal(id){
+  document.getElementById(id).classList.add('active');
+  document.body.style.overflow='hidden';
+}
+function closeModal(event, overlay){
+  if(event.target === overlay){
+    overlay.classList.remove('active');
+    document.body.style.overflow='';
+  }
+}
+document.querySelectorAll('.modal-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.modal-overlay').classList.remove('active');
+    document.body.style.overflow='';
+  });
+});
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    document.querySelectorAll('.modal-overlay.active').forEach(m => {
+      m.classList.remove('active');
+      document.body.style.overflow='';
     });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-  // Animate accuracy bars on scroll
-  const barObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.querySelectorAll('.acc-fill').forEach(bar => {
-          const width = bar.style.width;
-          bar.style.width = '0%';
-          setTimeout(() => { bar.style.width = width; }, 200);
-        });
-        barObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-
-  document.querySelectorAll('.result-block').forEach(el => barObserver.observe(el));
+  }
+});
 </script>
-
 </body>
 </html>
